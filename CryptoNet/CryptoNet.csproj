@@ -59,8 +59,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CryptoNet.ExtShared\CryptoNet.ExtShared.csproj" />
-    <ProjectReference Include="..\CryptoNet.Models\CryptoNet.Models.csproj" />
+    <ProjectReference Include="..\CryptoNet.ExtShared\CryptoNet.ExtShared.csproj" Pack="true" PackagePath="lib/netstandard2.0/" />
+    <ProjectReference Include="..\CryptoNet.Models\CryptoNet.Models.csproj" Pack="true" PackagePath="lib/netstandard2.0/" />
   </ItemGroup>
 
 </Project>
