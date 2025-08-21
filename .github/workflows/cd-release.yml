@@ -1,4 +1,4 @@
-name: "2. Continuous Deployment (Release)"
+﻿name: "2. Continuous Deployment (Release)"
 
 on:
   push:
@@ -18,7 +18,14 @@ jobs:
           fetch-depth: 0
 
       - name: Verify commit exists in origin/main
-        run: git branch --remote --contains | grep origin/main
+        run: |
+            git fetch origin main
+            if git merge-base --is-ancestor $GITHUB_SHA origin/main; then
+              echo "✅ Commit exists in main"
+            else
+              echo "❌ Commit is not in main"
+              exit 1
+            fi
 
       - name: Extract release notes
         run: |
