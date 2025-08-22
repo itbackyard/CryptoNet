@@ -1,21 +1,18 @@
 name: "3. Code Coverage"
 
 permissions:
-  contents: write # commit & push
-  pull-requests: write # open/update PRs
-  issues: write # create/apply labels (fixes your error)
+  contents: write
+  pull-requests: write
+  issues: write
 
 on:
   push:
-    branches:
-      - "main"
-      - "feature/*"
+    branches: ["main", "feature/*"]
     paths-ignore:
       - "**/README.md"
-      - "coverage-badge.svg" # prevent loops when the badge PR merges
+      - "coverage-badge.svg" # avoid loops after merge
   pull_request:
-    branches:
-      - "main"
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -28,7 +25,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          persist-credentials: false # PR action will handle auth
+          persist-credentials: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -60,15 +57,37 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: cp coverage/badge_linecoverage.svg ./coverage-badge.svg
 
-      # Create/update a PR that contains ONLY the badge file
-      - name: Open / update PR with coverage badge (only on main)
+      # Compare against current main and only proceed if the badge changed
+      - name: Detect badge change (only on main)
         if: github.ref == 'refs/heads/main'
+        id: badge
+        shell: bash
+        run: |
+          set -e
+          if [ ! -f coverage-badge.svg ]; then
+            echo "exists=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Get current version from main (if it exists)
+          if git cat-file -e origin/main:coverage-badge.svg 2>/dev/null; then
+            git show origin/main:coverage-badge.svg > /tmp/old-badge.svg
+            if cmp -s coverage-badge.svg /tmp/old-badge.svg; then
+              echo "exists=true"  >> $GITHUB_OUTPUT
+              echo "changed=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          fi
+          echo "exists=true"   >> $GITHUB_OUTPUT
+          echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Open / update PR with coverage badge (only when changed)
+        if: github.ref == 'refs/heads/main' && steps.badge.outputs.exists == 'true' && steps.badge.outputs.changed == 'true'
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} # uses repo�s workflow token
-          branch: ci/update-coverage-badge # PR head branch
-          base: main # PR base branch
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ci/update-coverage-badge
+          base: main
           title: "Update coverage badge"
           commit-message: "Update coverage badge"
           body: "Automated update of coverage-badge.svg"
@@ -79,15 +98,9 @@ jobs:
             automated
 
       - name: Report CPR result
+        if: github.ref == 'refs/heads/main'
         run: |
+          echo "exists=${{ steps.badge.outputs.exists }}"
+          echo "changed=${{ steps.badge.outputs.changed }}"
           echo "result=${{ steps.cpr.outputs.result }}"
-          echo "pr=${{ steps.cpr.outputs.pull-request-url || 'no PR (no changes)'}}"
-
-      # Optional: auto-merge the PR when allowed by branch protections
-      - name: Enable auto-merge for badge PR
-        if: steps.cpr.outputs.pull-request-number
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
+          echo "pr=${{ steps.cpr.outputs['pull-request-url'] || 'n/a' }}"
