@@ -11,7 +11,7 @@ on:
       - "feature/*"
     paths-ignore:
       - "**/README.md"
-      - "coverage-badge.svg"    # prevent loops when the bot updates the badge
+      - "coverage-badge.svg"    # prevent loops when the badge PR merges
   pull_request:
     branches:
       - "main"
@@ -27,7 +27,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          persist-credentials: false   # we'll rely on the action to commit/push
+          persist-credentials: false   # let CPR push with the workflow token
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -55,19 +55,19 @@ jobs:
           name: code-coverage-report
           path: coverage
 
-      - name: Prepare single-file badge for repo root (only on main)
+      - name: Prepare badge for repo root (only on main)
         if: github.ref == 'refs/heads/main'
-        run: |
-          cp coverage/badge_linecoverage.svg ./coverage-badge.svg
+        run: cp coverage/badge_linecoverage.svg ./coverage-badge.svg
 
-      # Create/update a PR containing only the badge file. The action handles commits & pushes.
+      # Create or update a PR that contains ONLY the badge file
       - name: Open / update PR with coverage badge (only on main)
         if: github.ref == 'refs/heads/main'
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: ci/update-coverage-badge
-          base: main
+          token: ${{ secrets.GITHUB_TOKEN }}     # explicit to avoid 403s
+          branch: ci/update-coverage-badge       # PR head branch
+          base: main                             # PR base branch
           title: "Update coverage badge"
           commit-message: "Update coverage badge"
           body: "Automated update of coverage-badge.svg"
@@ -77,6 +77,16 @@ jobs:
             ci
             automated
 
-      - name: Print PR URL
-        if: steps.cpr.outputs.pull-request-url
-        run: echo "${{ steps.cpr.outputs.pull-request-url }}"
+      - name: Report CPR result
+        run: |
+          echo "result=${{ steps.cpr.outputs.result }}"
+          echo "pr=${{ steps.cpr.outputs.pull-request-url || 'no PR (no changes)'}}"
+
+      # Optional: auto-merge the PR when allowed by your protections
+      - name: Enable auto-merge for badge PR
+        if: steps.cpr.outputs.pull-request-number
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
