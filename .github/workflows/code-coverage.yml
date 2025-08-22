@@ -1,8 +1,9 @@
 name: "3. Code Coverage"
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write          # commit & push
+  pull-requests: write     # open/update PRs
+  issues: write            # create/apply labels (fixes your error)
 
 on:
   push:
@@ -27,7 +28,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          persist-credentials: false   # let CPR push with the workflow token
+          persist-credentials: false   # PR action will handle auth
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -59,13 +60,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: cp coverage/badge_linecoverage.svg ./coverage-badge.svg
 
-      # Create or update a PR that contains ONLY the badge file
+      # Create/update a PR that contains ONLY the badge file
       - name: Open / update PR with coverage badge (only on main)
         if: github.ref == 'refs/heads/main'
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}     # explicit to avoid 403s
+          token: ${{ secrets.GITHUB_TOKEN }}     # uses repo’s workflow token
           branch: ci/update-coverage-badge       # PR head branch
           base: main                             # PR base branch
           title: "Update coverage badge"
@@ -82,7 +83,7 @@ jobs:
           echo "result=${{ steps.cpr.outputs.result }}"
           echo "pr=${{ steps.cpr.outputs.pull-request-url || 'no PR (no changes)'}}"
 
-      # Optional: auto-merge the PR when allowed by your protections
+      # Optional: auto-merge the PR when allowed by branch protections
       - name: Enable auto-merge for badge PR
         if: steps.cpr.outputs.pull-request-number
         uses: peter-evans/enable-pull-request-automerge@v3
