@@ -11,7 +11,7 @@ on:
       - "feature/*"
     paths-ignore:
       - "**/README.md"
-      - "coverage-badge.svg"          # prevent loops when the bot updates the badge
+      - "coverage-badge.svg"    # prevent loops when the bot updates the badge
   pull_request:
     branches:
       - "main"
@@ -27,7 +27,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          persist-credentials: false       # we'll push with the workflow token
+          persist-credentials: false   # we'll rely on the action to commit/push
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -55,52 +55,28 @@ jobs:
           name: code-coverage-report
           path: coverage
 
-      - name: Upload coverage badge file
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage-badge
-          path: coverage/badge_linecoverage.svg
-
-      # === Create/update PR with the badge (only when running on main) ===
-      - name: Prepare badge (only on main)
+      - name: Prepare single-file badge for repo root (only on main)
         if: github.ref == 'refs/heads/main'
         run: |
           cp coverage/badge_linecoverage.svg ./coverage-badge.svg
 
-      - name: Commit badge to a branch (only on main)
+      # Create/update a PR containing only the badge file. The action handles commits & pushes.
+      - name: Open / update PR with coverage badge (only on main)
         if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Create/update a dedicated branch
-          BRANCH="ci/update-coverage-badge"
-          git checkout -B "$BRANCH"
-
-          git add coverage-badge.svg
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            echo "NO_CHANGES=true" >> $GITHUB_ENV
-          else
-            git commit -m "Update coverage badge"
-            echo "NO_CHANGES=false" >> $GITHUB_ENV
-          fi
-
-      - name: Push branch (only on main and if changes)
-        if: github.ref == 'refs/heads/main' && env.NO_CHANGES == 'false'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          BRANCH="ci/update-coverage-badge"
-          git push --set-upstream "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}" "$BRANCH"
-
-      - name: Open / update PR (only on main and if changes)
-        if: github.ref == 'refs/heads/main' && env.NO_CHANGES == 'false'
+        id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
           branch: ci/update-coverage-badge
+          base: main
           title: "Update coverage badge"
           commit-message: "Update coverage badge"
           body: "Automated update of coverage-badge.svg"
-          base: main
-          labels: ci, automated
+          add-paths: |
+            coverage-badge.svg
+          labels: |
+            ci
+            automated
+
+      - name: Print PR URL
+        if: steps.cpr.outputs.pull-request-url
+        run: echo "${{ steps.cpr.outputs.pull-request-url }}"
