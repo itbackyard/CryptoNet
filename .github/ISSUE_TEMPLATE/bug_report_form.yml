@@ -33,9 +33,9 @@ body:
       label: Version
       description: What version of our software are you running?
       options:
-        - 2.4.x >= (Default)
-        - 2.3.x <= (older versions)
-        - 3.0.x >= (Coming soon)
+        - 3.0.x >= (Default)
+        - 2.4.x >= (Older version)
+        - 2.3.x <= (Discontinued)
       default: 0
     validations:
       required: true
