@@ -1,5 +1,10 @@
-Remove-Item .\api -Recurse
-Remove-Item .\_site\. -Recurse
+if (Test-Path ".\api") {
+    Remove-Item ".\api" -Recurse -Force
+}
+
+if (Test-Path ".\_site") {
+    Remove-Item ".\_site" -Recurse -Force
+}
 docfx metadata
 docfx build .\docfx.json 
 
