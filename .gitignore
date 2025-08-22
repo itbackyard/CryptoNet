@@ -410,3 +410,4 @@ CoverageReport
 /_site
 /archive
 /.idea/.idea.CryptoNet/.idea
+coverage/
