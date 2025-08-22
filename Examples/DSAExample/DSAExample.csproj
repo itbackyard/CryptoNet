@@ -9,10 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\CryptoNet\CryptoNet.csproj" />
+    <ProjectReference Include="..\..\CryptoNet.ExtShared\CryptoNet.ExtShared.csproj" />
   </ItemGroup>
 </Project>
