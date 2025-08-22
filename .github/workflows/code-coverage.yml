@@ -1,5 +1,8 @@
 name: "3. Code Coverage"
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -22,6 +25,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -55,25 +59,22 @@ jobs:
           name: code-coverage-badge
           path: coverage/badge_linecoverage.svg
 
-      - name: Commit coverage badge
+      - name: Commit coverage badge (only on main)
+        if: github.ref == 'refs/heads/main'
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Copy badge to root directory
-          find . -name badge_linecoverage.svg || echo "Badge not found"
           cp coverage/badge_linecoverage.svg ./coverage-badge.svg
 
-          # Force add badge and commit
-          git add -f coverage-badge.svg
-          if git diff-index --cached --quiet HEAD; then
-              echo "No changes to commit"
+          git add coverage-badge.svg
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
           else
-              git commit -m 'Update coverage badge'
-              git push --force
+            git commit -m "Update coverage badge"
+            git push
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Directory Structure
         uses: FiorelaCiroku/XDTesting-Print-Directory-Structure@v1.0.2

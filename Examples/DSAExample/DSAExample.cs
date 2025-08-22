@@ -5,8 +5,6 @@
 
 using CryptoNet;
 using CryptoNet.ExtShared;
-using System.Runtime.InteropServices;
-
 
 var confidentialMessage = "Watson, can you hear me?";
 
