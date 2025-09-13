@@ -12,6 +12,12 @@
 It is a 100% native C# implementation based on [Microsoft](https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography?view=net-8.0) cryptography.
 It does not depend on other libraries.
 
+## 📢 Chat with CryptoNet docs
+
+Now you can use AI to chat with CryptoNet documentation.
+
+https://gitmcp.io/itbackyard/CryptoNet/chat
+
 ## Installation
 
 You can install the CryptoNet NuGet package via [NuGet](https://www.nuget.org/packages/CryptoNet).
