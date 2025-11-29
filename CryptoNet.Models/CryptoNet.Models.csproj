@@ -8,13 +8,9 @@
     <IsPackable>false</IsPackable>
     <RepositoryUrl>https://github.com/itbackyard/CryptoNet</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-
-    <!-- SourceLink + deterministic build settings -->
     <DebugType>portable</DebugType>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-
-    <!-- Embed generated (untracked) sources so SourceLink validation passes -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
