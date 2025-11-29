@@ -4,7 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
+    <!-- Prevent this project from being packed as its own NuGet package. -->
     <IsPackable>false</IsPackable>
+
+    <!-- Produce portable PDBs and deterministic outputs for symbol/SourceLink validation -->
+    <DebugType>portable</DebugType>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>

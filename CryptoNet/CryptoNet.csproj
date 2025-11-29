@@ -70,7 +70,24 @@
         <Pack>true</Pack>
         <PackagePath>lib\netstandard2.0\</PackagePath>
       </None>
+      <None Include="$(OutputPath)CryptoNet.ExtShared.pdb" Condition="Exists('$(OutputPath)CryptoNet.ExtShared.pdb')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.ExtShared.xml" Condition="Exists('$(OutputPath)CryptoNet.ExtShared.xml')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+
       <None Include="$(OutputPath)CryptoNet.Models.dll">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.Models.pdb" Condition="Exists('$(OutputPath)CryptoNet.Models.pdb')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.Models.xml" Condition="Exists('$(OutputPath)CryptoNet.Models.xml')">
         <Pack>true</Pack>
         <PackagePath>lib\netstandard2.0\</PackagePath>
       </None>
