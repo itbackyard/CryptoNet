@@ -64,7 +64,7 @@
     <ProjectReference Include="..\CryptoNet.Models\CryptoNet.Models.csproj" PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="IncludeReferencedDllsInPackage" AfterTargets="Build">
+  <Target Name="IncludeReferencedDllsInPackage" BeforeTargets="GenerateNuspec">
     <ItemGroup>
       <None Include="$(OutputPath)CryptoNet.ExtShared.dll">
         <Pack>true</Pack>
