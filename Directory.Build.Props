@@ -3,9 +3,9 @@
   <PropertyGroup>
     <Authors>Maytham Fahmi and Contributors</Authors>
     <Copyright>All Rights Reserved</Copyright>
-    <Version>3.2.0</Version>
-    <FileVersion>3.2.0.0</FileVersion>
-    <AssemblyVersion>3.2.0.0</AssemblyVersion>
+    <Version>3.2.5</Version>
+    <FileVersion>3.2.5.0</FileVersion>
+    <AssemblyVersion>3.2.5.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
