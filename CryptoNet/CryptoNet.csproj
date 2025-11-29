@@ -15,7 +15,6 @@
     <Company>itbackyard</Company>
     <Authors>Maytham Fahmi</Authors>
     <MinClientVersion>1.0.0</MinClientVersion>
-    <Version>3.1.9</Version>
     <Title>CryptoNet</Title>
     <Product>CryptoNet</Product>
     <RootNamespace>CryptoNet</RootNamespace>
@@ -28,13 +27,12 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
+    <DebugType>embedded</DebugType>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-
-    <!-- Ensure referenced project outputs are included in the resulting nupkg -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeReferencedProjects>true</IncludeReferencedProjects>
   </PropertyGroup>
 
@@ -49,14 +47,14 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" PrivateAssets="All" />
-    <PackageReference Include="System.Text.Json" Version="9.0.8" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" PrivateAssets="All" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\img\CryptoNetLogo-icon.png" Pack="true" PackagePath="\" >
+    <None Include="..\img\CryptoNetLogo-icon.png" Pack="true" PackagePath="\">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
