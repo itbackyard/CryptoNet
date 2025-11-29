@@ -10,7 +10,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Deterministic>true</Deterministic>
-    <PathMap>$(SolutionDir)={CryptoNet}/</PathMap>
+
+    <!-- Only set PathMap when SolutionDir is defined to avoid malformed /pathmap -->
+    <PathMap Condition=" '$(SolutionDir)' != '' ">$(SolutionDir)={CryptoNet}/</PathMap>
+
     <!-- Some of us are already working with the next SDK -->
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
