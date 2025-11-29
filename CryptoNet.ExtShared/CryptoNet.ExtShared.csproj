@@ -4,15 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
-    <!-- Prevent this project from being packed as its own NuGet package.
-         That ensures its compiled DLL will be embedded into CryptoNet when
-         packing the top-level project. -->
-    <IsPackable>false</IsPackable>
-    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
 
-    <!-- Produce portable PDBs and deterministic outputs for symbol/SourceLink validation -->
+    <IsPackable>false</IsPackable>
+    <RepositoryUrl>https://github.com/itbackyard/CryptoNet</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- SourceLink + deterministic build settings -->
     <DebugType>portable</DebugType>
     <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+    <!-- Embed generated (untracked) sources so SourceLink validation passes -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
