@@ -15,7 +15,6 @@
     <Company>itbackyard</Company>
     <Authors>Maytham Fahmi</Authors>
     <MinClientVersion>1.0.0</MinClientVersion>
-    <Version>3.0.0</Version>
     <Title>CryptoNet</Title>
     <Product>CryptoNet</Product>
     <RootNamespace>CryptoNet</RootNamespace>
@@ -27,12 +26,12 @@
     <Copyright>Copyright © 2020</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeReferencedProjects>true</IncludeReferencedProjects>
   </PropertyGroup>
 
   <Target Name="PrepareReleaseNotes" BeforeTargets="GenerateNuspec">
@@ -46,8 +45,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" PrivateAssets="All" />
-    <PackageReference Include="System.Text.Json" Version="9.0.8" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" PrivateAssets="All" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,5 +61,35 @@
     <ProjectReference Include="..\CryptoNet.ExtShared\CryptoNet.ExtShared.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\CryptoNet.Models\CryptoNet.Models.csproj" PrivateAssets="all" />
   </ItemGroup>
+
+  <Target Name="IncludeReferencedDllsInPackage" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <None Include="$(OutputPath)CryptoNet.ExtShared.dll">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.ExtShared.pdb" Condition="Exists('$(OutputPath)CryptoNet.ExtShared.pdb')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.ExtShared.xml" Condition="Exists('$(OutputPath)CryptoNet.ExtShared.xml')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+
+      <None Include="$(OutputPath)CryptoNet.Models.dll">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.Models.pdb" Condition="Exists('$(OutputPath)CryptoNet.Models.pdb')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+      <None Include="$(OutputPath)CryptoNet.Models.xml" Condition="Exists('$(OutputPath)CryptoNet.Models.xml')">
+        <Pack>true</Pack>
+        <PackagePath>lib\netstandard2.0\</PackagePath>
+      </None>
+    </ItemGroup>
+  </Target>
 
 </Project>
