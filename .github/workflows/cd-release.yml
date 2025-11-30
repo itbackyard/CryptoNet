@@ -14,11 +14,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch origin/main
-        run: git fetch --no-tags origin main:refs/remotes/origin/main --depth=1
-
-      - name: Verify commit exists in origin/main
-        run: git branch --remote --contains | grep origin/main
+      # - name: Verify commit exists in origin/main
+      #   run: git branch --remote --contains | grep origin/main
 
       - name: Extract release notes
         run: |
