@@ -6,11 +6,8 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-
-    timeout-minutes: 15
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,24 +21,25 @@ jobs:
         run: |
           git log --pretty=format:'%d %s' ${GITHUB_REF} | perl -pe 's| \(.*tag: v(\d+.\d+.\d+(-preview\d{3})?)(, .*?)*\)|\n## \1\n|g' > RELEASE-NOTES
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Upload release notes
+        uses: actions/upload-artifact@v4
         with:
-          dotnet-version: 8.0.x
+          name: release-notes
+          path: RELEASE-NOTES
 
-      - name: Set VERSION variable from tag
-        run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+  build-and-pack:
+    needs: prepare
+    uses: ./.github/workflows/cd-build-test-pack.yml
+    with:
+      version: ${{ github.ref_name }}
+      configuration: Release
 
-      - name: Build
-        run: dotnet build --configuration Release /p:Version=${VERSION}
+  publish:
+    needs: build-and-pack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
 
-      - name: Test
-        run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
-
-      - name: Pack
-        run: dotnet pack --configuration Release /p:Version=${VERSION} --output .
-
-      - name: Push
-        run: dotnet nuget push CryptoNet.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_TOKEN}
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - name: Push to NuGet
+        run: dotnet nuget push nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
