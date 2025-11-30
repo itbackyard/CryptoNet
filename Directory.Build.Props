@@ -23,6 +23,7 @@
     <!-- Generate symbol packages for NuGet -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
 </Project>
