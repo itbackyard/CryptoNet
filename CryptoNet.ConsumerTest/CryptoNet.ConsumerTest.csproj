@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CryptoNet" Version="3.1.12-preview.20251129.2241" />
+    <PackageReference Include="CryptoNet" Version="3.4.2" />
   </ItemGroup>
 
 </Project>
