@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{1733D1
 		RELEASE-NOTES = RELEASE-NOTES
 		run_codecoverage.ps1 = run_codecoverage.ps1
 		run_codecoverage.txt = run_codecoverage.txt
+		run_release.ps1 = run_release.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{6976E2ED-A139-48C5-A390-639F56A8B348}"
