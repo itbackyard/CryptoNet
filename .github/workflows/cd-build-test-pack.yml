@@ -10,14 +10,10 @@ on:
         required: true
         type: string
         default: Release
-      runner:
-        required: false
-        type: string
-        default: ubuntu-latest
 
 jobs:
   build:
-    runs-on: ${{ inputs.runner }}
+    runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
@@ -29,14 +25,23 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Sanitize version
+        id: sanitize
+        run: |
+          v='${{ inputs.version }}'
+          # Remove leading v or V if present
+          v="${v#v}"
+          v="${v#V}"
+          echo "sanitized_version=$v" >> $GITHUB_OUTPUT
+
       - name: Build
-        run: dotnet build --configuration ${{ inputs.configuration }} /p:Version=${{ inputs.version }}
+        run: dotnet build --configuration ${{ inputs.configuration }} /p:Version=${{ steps.sanitize.outputs.sanitized_version }}
 
       - name: Test
-        run: dotnet test --configuration ${{ inputs.configuration }} /p:Version=${{ inputs.version }} --no-build
+        run: dotnet test --configuration ${{ inputs.configuration }} /p:Version=${{ steps.sanitize.outputs.sanitized_version }} --no-build
 
       - name: Pack
-        run: dotnet pack --configuration ${{ inputs.configuration }} /p:Version=${{ inputs.version }} --output .
+        run: dotnet pack --configuration ${{ inputs.configuration }} /p:Version=${{ steps.sanitize.outputs.sanitized_version }} --output .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
