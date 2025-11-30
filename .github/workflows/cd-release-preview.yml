@@ -6,26 +6,18 @@ on:
       - "v[0-9]+\\.[0-9]+\\.[0-9]+-preview*"
 
 jobs:
-  build:
+  build-and-pack:
+    uses: ./.github/workflows/cd-build-test-pack.yml
+    with:
+      version: ${{ github.ref_name }}
+      configuration: Release
+
+  publish:
+    needs: build-and-pack
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Set VERSION variable from tag
-        run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-
-      - name: Pack
-        run: dotnet pack --configuration Release /p:Version=${VERSION} --output .
-
-      - name: Push
-        run: dotnet nuget push CryptoNet.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_TOKEN}
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - name: Push to NuGet
+        run: dotnet nuget push nuget-packages/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_TOKEN }}
