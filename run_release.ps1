@@ -14,14 +14,14 @@ if ($VersionNumber -notmatch '^\d+\.\d+\.\d+$') {
 }
 
 # Build preview suffix (valid SemVer identifiers, no leading zeros)
-$DatePart  = (Get-Date -Format "yyyyMMdd")   # e.g. 20250822
-$TimePart  = (Get-Date -Format "Hmm")        # e.g. 845 (not 0845, no leading zero!)
-$PreviewId = "$DatePart.$TimePart"           # → "20250822.845"
+$DatePart  = (Get-Date -Format "yyyyMMdd")   # e.g 20250822
+$TimePart  = (Get-Date -Format "Hmm")        # e.g 845 (not 0845, no leading zero!)
+$PreviewId = "$DatePart$TimePart"            # → "20250822845" (no dots!)
 
 # Construct the tag
 if ($IsPreview) {
-    # format: vX.Y.Z-preview.YYYYMMDD.HHmm
-    $TagName = "v$VersionNumber-preview.$PreviewId"
+    # format: vX.Y.Z-previewYYYYMMDDHHmm (NuGet-compliant)
+    $TagName = "v$VersionNumber-preview$PreviewId"
 } else {
     $TagName = "v$VersionNumber"
 }

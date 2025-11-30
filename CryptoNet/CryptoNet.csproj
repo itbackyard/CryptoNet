@@ -26,7 +26,9 @@
     <Copyright>Copyright © 2020</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
     <DebugType>embedded</DebugType>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -62,7 +64,7 @@
     <ProjectReference Include="..\CryptoNet.Models\CryptoNet.Models.csproj" PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="IncludeReferencedDllsInPackage" BeforeTargets="GenerateNuspec">
+  <Target Name="IncludeReferencedDllsInPackage" AfterTargets="Build">
     <ItemGroup>
       <None Include="$(OutputPath)CryptoNet.ExtShared.dll">
         <Pack>true</Pack>

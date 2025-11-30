@@ -3,7 +3,7 @@ name: "2. Continuous Deployment (Release Preview)"
 on:
   push:
     tags:
-      - "v[0-9]+\\.[0-9]+\\.[0-9]+-preview.*"
+      - "v[0-9]+\\.[0-9]+\\.[0-9]+-preview*"
 
 jobs:
   build:

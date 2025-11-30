@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32407.343
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11222.16 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoNet", "CryptoNet\CryptoNet.csproj", "{8F85375C-A0DC-4B67-B934-F58ED4114F5A}"
 EndProject
@@ -16,11 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{1733D1
 		.github\workflows\cd-release.yml = .github\workflows\cd-release.yml
 		.github\workflows\ci.yml = .github\workflows\ci.yml
 		.github\workflows\code-coverage.yml = .github\workflows\code-coverage.yml
+		Directory.Build.Props = Directory.Build.Props
 		DockerBuild.ps1 = DockerBuild.ps1
 		Dockerfile = Dockerfile
 		RELEASE-NOTES = RELEASE-NOTES
 		run_codecoverage.ps1 = run_codecoverage.ps1
 		run_codecoverage.txt = run_codecoverage.txt
+		run_release.ps1 = run_release.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{6976E2ED-A139-48C5-A390-639F56A8B348}"

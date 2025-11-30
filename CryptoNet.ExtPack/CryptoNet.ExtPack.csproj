@@ -17,7 +17,6 @@
     <Company>itbackyard</Company>
     <Authors>Maytham Fahmi</Authors>
     <MinClientVersion>1.0.0</MinClientVersion>
-    <Version>3.0.0</Version>
     <Title>CryptoNet.ExtPack</Title>
     <Product>CryptoNet.ExtPack</Product>
     <RootNamespace>CryptoNet.ExtPack</RootNamespace>
