@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # …
+      # ï¿½
 ```
 
 ## Versioning and Git Tag Guidelines
@@ -98,3 +98,15 @@ Use via: `${{ steps.sanitize.outputs.sanitized_version }}`
 ## Maintenance
 
 -   Keep conventions aligned with GitHub Actions and NuGet rules.
+
+## Contributing
+
+You are more than welcome to contribute in one of the following ways:
+
+1. Basic: Give input, and suggestions for improvement by creating an issue and labeling it https://github.com/itbackyard/CryptoNet/issues
+2. Advance: if you have good knowledge of C# and Cryptography just grab one of the issues, or features, or create a new one and refactor and add a pull request.
+3. Documentation: Add, update, or improve documentation, by making a pull request.
+
+### How to contribute:
+
+[Here](https://www.dataschool.io/how-to-contribute-on-github/) is a link to learn how to contribute if you are not aware of how to do it.
