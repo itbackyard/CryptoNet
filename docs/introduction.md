@@ -10,8 +10,8 @@ Overview
 
 CryptoNet supports two primary cryptographic scenarios:
 
-- Symmetric encryption — a single shared secret (key) is used for both encryption and decryption.
-- Asymmetric encryption — a public/private key pair is used; the public key encrypts and the private key decrypts.
+- Symmetric encryption - a single shared secret (key) is used for both encryption and decryption.
+- Asymmetric encryption - a public/private key pair is used; the public key encrypts and the private key decrypts.
 
 Symmetric encryption
 - Use a secret key (same key for encrypt/decrypt).
@@ -26,7 +26,7 @@ Asymmetric encryption
 Key lifecycle and security notes
 - Private keys must be kept confidential. Do not distribute private keys.
 - If a private key is leaked, an attacker can decrypt any content encrypted with the corresponding public key. Rotate (revoke and reissue) the key pair if compromise is suspected.
-- Conversely, if you lose a private key and you do not have a backup, you will not be able to decrypt content that was encrypted for that key—make secure backups as appropriate.
+- Conversely, if you lose a private key and you do not have a backup, you will not be able to decrypt content that was encrypted for that keyâ€”make secure backups as appropriate.
 
 Using X.509 certificates
 - CryptoNet can use the public/private keys stored in X.509 certificates as an alternative to self-generated keys. This can simplify key distribution and lifecycle when using enterprise PKI.
