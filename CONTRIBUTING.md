@@ -47,7 +47,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # �
 ~~~
 
 ## Versioning and Git Tag Guidelines
