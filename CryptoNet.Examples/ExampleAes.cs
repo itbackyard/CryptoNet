@@ -12,119 +12,146 @@ using CryptoNet.Models;
 
 namespace CryptoNet.Examples;
 
+/// <summary>
+/// Example usage scenarios for AES symmetric encryption using the CryptoNet library.
+/// Demonstrates generating, saving/loading symmetric keys and encrypting/decrypting
+/// both content and files.
+/// </summary>
 public static class ExampleAes
 {
     private const string ConfidentialDummyData = @"Some Secret Data";
 
-    private static readonly string BaseFolder = AppDomain.CurrentDomain.BaseDirectory;
-    private readonly static string SymmetricKeyFile = Path.Combine(BaseFolder, $"{KeyType.SymmetricKey}.xml");
+    private static readonly string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+    private static readonly string SymmetricKeyFilePath = Path.Combine(BaseDirectory, $"{KeyType.SymmetricKey}.xml");
 
-    public static void Example_1_Encrypt_Decrypt_Content_With_SelfGenerated_SymmetricKey()
+    /// <summary>
+    /// Generate a symmetric key, encrypt and decrypt a string using self-generated key.
+    /// </summary>
+    public static void EncryptDecryptWithSelfGeneratedSymmetricKey()
     {
         ICryptoNetAes cryptoNet = new CryptoNetAes();
-        var key = cryptoNet.GetKey();
+        string key = cryptoNet.GetKey();
 
         ICryptoNet encryptClient = new CryptoNetAes(key);
-        var encrypt = encryptClient.EncryptFromString(ConfidentialDummyData);
+        byte[] encrypted = encryptClient.EncryptFromString(ConfidentialDummyData);
 
         ICryptoNet decryptClient = new CryptoNetAes(key);
-        var decrypt = decryptClient.DecryptToString(encrypt);
+        string decrypted = decryptClient.DecryptToString(encrypted);
 
-        Debug.Assert(ConfidentialDummyData == decrypt);
+        Debug.Assert(ConfidentialDummyData == decrypted);
     }
 
-    public static void Example_2_SelfGenerated_And_Save_SymmetricKey()
+    /// <summary>
+    /// Generate a symmetric key and save it to disk, then load it to decrypt previously encrypted content.
+    /// </summary>
+    public static void GenerateAndSaveSymmetricKey()
     {
         ICryptoNetAes cryptoNet = new CryptoNetAes();
-        var file = new FileInfo(SymmetricKeyFile);
-        cryptoNet.SaveKey(file);
+        FileInfo keyFile = new FileInfo(SymmetricKeyFilePath);
+        cryptoNet.SaveKey(keyFile);
 
-        Debug.Assert(File.Exists(file.FullName));
+        Debug.Assert(File.Exists(keyFile.FullName));
 
-        var encrypt = cryptoNet.EncryptFromString(ConfidentialDummyData);
+        byte[] encrypted = cryptoNet.EncryptFromString(ConfidentialDummyData);
 
-        ICryptoNet cryptoNetKeyImport = new CryptoNetAes(file);
-        var decrypt = cryptoNetKeyImport.DecryptToString(encrypt);
+        ICryptoNet cryptoNetImported = new CryptoNetAes(keyFile);
+        string decrypted = cryptoNetImported.DecryptToString(encrypted);
 
-        Debug.Assert(ConfidentialDummyData == decrypt);
+        Debug.Assert(ConfidentialDummyData == decrypted);
     }
 
-    public static void Example_3_Encrypt_Decrypt_Content_With_Own_SymmetricKey()
+    /// <summary>
+    /// Encrypt and decrypt using a provided raw symmetric key and IV.
+    /// </summary>
+    public static void EncryptDecryptWithProvidedSymmetricKey()
     {
-        var symmetricKey = "12345678901234567890123456789012";
+        string symmetricKey = "12345678901234567890123456789012";
         if (symmetricKey.Length != 32)
         {
-            Console.WriteLine("key should be 32 character long");
+            Console.WriteLine("Key should be 32 characters long");
             Environment.Exit(0);
         }
 
-        var secret = "1234567890123456";
+        string secret = "1234567890123456";
         if (secret.Length != 16)
         {
-            Console.WriteLine("key should be 16 character long");
+            Console.WriteLine("IV should be 16 characters long");
             Environment.Exit(1);
         }
 
-        var key = Encoding.UTF8.GetBytes(symmetricKey);
-        var iv = Encoding.UTF8.GetBytes(secret);
+        byte[] key = Encoding.UTF8.GetBytes(symmetricKey);
+        byte[] iv = Encoding.UTF8.GetBytes(secret);
 
         ICryptoNet encryptClient = new CryptoNetAes(key, iv);
-        var encrypt = encryptClient.EncryptFromString(ConfidentialDummyData);
+        byte[] encrypted = encryptClient.EncryptFromString(ConfidentialDummyData);
 
         ICryptoNet decryptClient = new CryptoNetAes(key, iv);
-        var decrypt = decryptClient.DecryptToString(encrypt);
+        string decrypted = decryptClient.DecryptToString(encrypted);
 
-        Debug.Assert(ConfidentialDummyData == decrypt);
+        Debug.Assert(ConfidentialDummyData == decrypted);
     }
 
-    public static void Example_4_Encrypt_Decrypt_Content_With_Human_Readable_Key_Secret_SymmetricKey()
+    /// <summary>
+    /// Generate a human-readable key/secret pair and use them for encryption/decryption.
+    /// </summary>
+    public static void EncryptDecryptWithHumanReadableKeySecret()
     {
-        var symmetricKey = UniqueKeyGenerator("symmetricKey");
-        var secret = new string(UniqueKeyGenerator("password").Take(16).ToArray());
+        string symmetricKey = GenerateUniqueKey("symmetricKey");
+        string secret = new string(GenerateUniqueKey("password").Take(16).ToArray());
 
-        var key = Encoding.UTF8.GetBytes(symmetricKey);
-        var iv = Encoding.UTF8.GetBytes(secret);
+        byte[] key = Encoding.UTF8.GetBytes(symmetricKey);
+        byte[] iv = Encoding.UTF8.GetBytes(secret);
 
         ICryptoNet encryptClient = new CryptoNetAes(key, iv);
-        var encrypt = encryptClient.EncryptFromString(ConfidentialDummyData);
+        byte[] encrypted = encryptClient.EncryptFromString(ConfidentialDummyData);
 
         ICryptoNet decryptClient = new CryptoNetAes(key, iv);
-        var decrypt = decryptClient.DecryptToString(encrypt);
+        string decrypted = decryptClient.DecryptToString(encrypted);
 
-        Debug.Assert(ConfidentialDummyData == decrypt);
+        Debug.Assert(ConfidentialDummyData == decrypted);
     }
 
-    public static void Example_5_Encrypt_And_Decrypt_File_With_SymmetricKey_Test(string filename)
+    /// <summary>
+    /// Encrypt and decrypt a file using a self-generated symmetric key and verify content equality.
+    /// </summary>
+    /// <param name="filename">Relative path under TestFiles directory to the file to encrypt.</param>
+    public static void EncryptAndDecryptFileWithSymmetricKeyTest(string filename)
     {
         ICryptoNetAes cryptoNet = new CryptoNetAes();
-        var key = cryptoNet.GetKey();
+        string key = cryptoNet.GetKey();
 
-        FileInfo fi = new FileInfo(filename);
+        FileInfo fileInfo = new FileInfo(filename);
 
         ICryptoNet encryptClient = new CryptoNetAes(key);
-        string pdfFilePath = Path.Combine(BaseFolder, filename);
-        byte[] pdfFileBytes = File.ReadAllBytes(pdfFilePath);
-        var encrypt = encryptClient.EncryptFromBytes(pdfFileBytes);
+        string sourceFilePath = Path.Combine(BaseDirectory, filename);
+        byte[] fileBytes = File.ReadAllBytes(sourceFilePath);
+        byte[] encrypted = encryptClient.EncryptFromBytes(fileBytes);
 
         ICryptoNet decryptClient = new CryptoNetAes(key);
-        var decrypt = decryptClient.DecryptToBytes(encrypt);
-        string pdfDecryptedFilePath = $"TestFiles\\{Path.GetFileNameWithoutExtension(fi.Name)}-decrypted.{fi.Extension}";
-        File.WriteAllBytes(pdfDecryptedFilePath, decrypt);
+        byte[] decrypted = decryptClient.DecryptToBytes(encrypted);
+        string decryptedFilePath = $"TestFiles\\{Path.GetFileNameWithoutExtension(fileInfo.Name)}-decrypted{fileInfo.Extension}";
+        File.WriteAllBytes(decryptedFilePath, decrypted);
 
-        var isIdenticalFile = ExtShared.ExtShared.ByteArrayCompare(pdfFileBytes, decrypt);
+        bool isIdenticalFile = ExtShared.ExtShared.ByteArrayCompare(fileBytes, decrypted);
         Debug.Assert(isIdenticalFile);
     }
 
-    public static string UniqueKeyGenerator(string input)
+    /// <summary>
+    /// Create a deterministic unique key string from input using MD5 (example helper).
+    /// </summary>
+    /// <param name="input">Input string to derive the key from.</param>
+    /// <returns>Hexadecimal string representation of MD5 hash.</returns>
+    public static string GenerateUniqueKey(string input)
     {
         byte[] inputBytes = Encoding.ASCII.GetBytes(input);
         byte[] hash = MD5.HashData(inputBytes);
 
         StringBuilder sb = new StringBuilder();
-        foreach (var t in hash)
+        foreach (byte b in hash)
         {
-            sb.Append(t.ToString("X2"));
+            sb.Append(b.ToString("X2"));
         }
+
         return sb.ToString();
     }
 }

@@ -1,34 +1,42 @@
 # Introduction
 
-### Short Intro
+This document gives a short introduction to CryptoNet and how the library is typically used.
 
-The library can be used in two ways:
+Supported targets
+- Core libraries target: .NET Standard 2.0 (for maximum compatibility).
+- Examples and tests target: .NET 8 and .NET 10.
 
-- **Symmetric encryption**
-- **Asymmetric encryption** (public key encryption)
+Overview
 
-#### Symmetric Encryption
+CryptoNet supports two primary cryptographic scenarios:
 
-You use the same key (any secret key) for both encryption and decryption.
+- Symmetric encryption — a single shared secret (key) is used for both encryption and decryption.
+- Asymmetric encryption — a public/private key pair is used; the public key encrypts and the private key decrypts.
 
-#### Asymmetric Encryption
+Symmetric encryption
+- Use a secret key (same key for encrypt/decrypt).
+- Protect the secret key: anyone with the key can decrypt the data.
 
-With asymmetric encryption, the library can use its own self-generated RSA key pairs (Private/Public keys) to encrypt and decrypt content.
+Asymmetric encryption
+- The library can generate RSA key pairs (private/public) for you, or it can use keys from an X.509 certificate.
+- Typical pattern:
+  - Use the **Public key** to encrypt data.
+  - Use the **Private key** to decrypt data.
 
-You can store the private key on one or more machines, while the public key can be easily distributed to all clients.
+Key lifecycle and security notes
+- Private keys must be kept confidential. Do not distribute private keys.
+- If a private key is leaked, an attacker can decrypt any content encrypted with the corresponding public key. Rotate (revoke and reissue) the key pair if compromise is suspected.
+- Conversely, if you lose a private key and you do not have a backup, you will not be able to decrypt content that was encrypted for that key—make secure backups as appropriate.
 
-> **Important:** Do not distribute private keys publicly; keep them in a safe place. If a private key is mistakenly exposed, you need to reissue new keys. Content already encrypted with the compromised private key cannot be decrypted with a newly generated private key. Before updating or deleting the old private key, ensure all encrypted content is decrypted, or you risk losing access to that content.
+Using X.509 certificates
+- CryptoNet can use the public/private keys stored in X.509 certificates as an alternative to self-generated keys. This can simplify key distribution and lifecycle when using enterprise PKI.
 
-Additionally, it is possible to use asymmetric keys from an X.509 certificate instead of generating your own keys.
+Further reading
+- Asymmetric encryption overview: https://www.cloudflare.com/learning/ssl/what-is-asymmetric-encryption/
+- Examples and usage (see the examples documentation): `docs/examples.md`
 
-The main concept of asymmetric encryption is the use of a Private key and a Public key:
-- Use the **Public key** to encrypt content.
-- Use the **Private key** to decrypt the content.
+Example code lives under the `CryptoNet.Examples` namespace and demonstrates AES (symmetric), DSA (signatures) and RSA (asymmetric) scenarios.
 
-Read more about asymmetric (public key) encryption [here](https://www.cloudflare.com/learning/ssl/what-is-asymmetric-encryption/).
-
-You can find complete examples for:
-
-- [RSA asymmetric cryptographic algorithm](https://github.com/maythamfahmi/CryptoNet/blob/main/Examples/RSAExample/RSAExample.cs)
-- [AES symmetric cryptographic algorithm](https://github.com/maythamfahmi/CryptoNet/blob/main/Examples/AESExample/AESExample.cs)
-- [DSA asymmetric cryptographic algorithm](https://github.com/maythamfahmi/CryptoNet/blob/main/Examples/DSAExample/DSAExample.cs)
+See also
+- Documentation and generation: `docs/tooling.md`
+- Examples reference: `docs/examples.md`

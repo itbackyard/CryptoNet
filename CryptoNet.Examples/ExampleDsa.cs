@@ -13,48 +13,57 @@ using CryptoNet.Models;
 
 namespace CryptoNet.Examples;
 
+/// <summary>
+/// Example usage scenarios for DSA operations using the CryptoNet library.
+/// Demonstrates signing, verification and saving/loading DSA keys.
+/// </summary>
 public static class ExampleDsa
 {
     private const string ConfidentialDummyData = @"Some Secret Data";
-    private static readonly string BaseFolder = AppDomain.CurrentDomain.BaseDirectory;
+    private static readonly string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-    internal static readonly string PrivateKeyFile = Path.Combine(BaseFolder, "privateKey");
-    internal static readonly string PublicKeyFile = Path.Combine(BaseFolder, "publicKey.pub");
+    internal static readonly string PrivateKeyFilePath = Path.Combine(BaseDirectory, "privateKey");
+    internal static readonly string PublicKeyFilePath = Path.Combine(BaseDirectory, "publicKey.pub");
 
-    public static void Example_1_Sign_Validate_Content_With_SelfGenerated_AsymmetricKey()
+    /// <summary>
+    /// Demonstrates signing content with a self-generated DSA key and validating the signature.
+    /// </summary>
+    public static void SignAndValidateWithSelfGeneratedKey()
     {
         ICryptoNetDsa client = new CryptoNetDsa();
-        var privateKey = client.GetKey(true);
+        string privateKeyXml = client.GetKey(true);
 
-        ICryptoNetDsa signatureClient = new CryptoNetDsa(privateKey);
-        var signature = signatureClient.CreateSignature(ConfidentialDummyData);
+        ICryptoNetDsa signatureClient = new CryptoNetDsa(privateKeyXml);
+        byte[] signature = signatureClient.CreateSignature(ConfidentialDummyData);
 
-        ICryptoNetDsa verifyClient = new CryptoNetDsa(privateKey);
-        var confidentialAsBytes = ExtShared.ExtShared.StringToBytes(ConfidentialDummyData);
+        ICryptoNetDsa verifyClient = new CryptoNetDsa(privateKeyXml);
+        byte[] contentBytes = ExtShared.ExtShared.StringToBytes(ConfidentialDummyData);
 
-        bool isVerified = verifyClient.IsContentVerified(confidentialAsBytes, signature);
+        bool isVerified = verifyClient.IsContentVerified(contentBytes, signature);
 
         Debug.Assert(isVerified == true);
     }
 
-    public static void Example_2_SelfGenerated_And_Save_AsymmetricKey()
+    /// <summary>
+    /// Demonstrates generating DSA key pair, saving them to files, and verifying signatures using loaded keys.
+    /// </summary>
+    public static void GenerateAndSaveDsaKeyPair()
     {
         ICryptoNetDsa cryptoNet = new CryptoNetDsa();
 
-        cryptoNet.SaveKey(new FileInfo(PrivateKeyFile), true);
-        cryptoNet.SaveKey(new FileInfo(PublicKeyFile), false);
+        cryptoNet.SaveKey(new FileInfo(PrivateKeyFilePath), true);
+        cryptoNet.SaveKey(new FileInfo(PublicKeyFilePath), false);
 
-        Debug.Assert(File.Exists(new FileInfo(PrivateKeyFile).FullName));
-        Debug.Assert(File.Exists(new FileInfo(PublicKeyFile).FullName));
+        Debug.Assert(File.Exists(new FileInfo(PrivateKeyFilePath).FullName));
+        Debug.Assert(File.Exists(new FileInfo(PublicKeyFilePath).FullName));
 
-        ICryptoNetDsa dsaWithPrivateKey = new CryptoNetDsa(new FileInfo(PrivateKeyFile));
-        var signature = dsaWithPrivateKey.CreateSignature(ConfidentialDummyData);
+        ICryptoNetDsa dsaWithPrivateKey = new CryptoNetDsa(new FileInfo(PrivateKeyFilePath));
+        byte[] signature = dsaWithPrivateKey.CreateSignature(ConfidentialDummyData);
 
-        ICryptoNetDsa dsaWithPublicKey = new CryptoNetDsa(new FileInfo(PublicKeyFile));
-        var confidentialAsBytes = ExtShared.ExtShared.StringToBytes(ConfidentialDummyData);
-        var isVerified = dsaWithPublicKey.IsContentVerified(confidentialAsBytes, signature);
+        ICryptoNetDsa dsaWithPublicKey = new CryptoNetDsa(new FileInfo(PublicKeyFilePath));
+        byte[] confidentialBytes = ExtShared.ExtShared.StringToBytes(ConfidentialDummyData);
+        bool isVerified = dsaWithPublicKey.IsContentVerified(confidentialBytes, signature);
 
         Debug.Assert(isVerified == true);
     }
-    
 }

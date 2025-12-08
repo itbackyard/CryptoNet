@@ -18,18 +18,18 @@ contributors must follow to avoid common build and packaging failures.
 
 ### Example: Caller (no `runs-on`)
 
-``` yaml
+~~~ yaml
 jobs:
   call-build:
     uses: ./.github/workflows/cd-build-test-pack.yml
     with:
       version: ${{ github.ref_name }}
       configuration: Release
-```
+~~~
 
 ### Example: Reusable Workflow
 
-``` yaml
+~~~ yaml
 on:
   workflow_call:
     inputs:
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       # �
-```
+~~~
 
 ## Versioning and Git Tag Guidelines
 
@@ -78,7 +78,7 @@ jobs:
 
 ### Sanitization Example
 
-``` yaml
+~~~ yaml
 - name: Sanitize version
   id: sanitize
   run: |
@@ -86,7 +86,7 @@ jobs:
     v="${v#v}"
     v="${v#V}"
     echo "sanitized_version=$v" >> "$GITHUB_OUTPUT"
-```
+~~~
 
 Use via: `${{ steps.sanitize.outputs.sanitized_version }}`
 

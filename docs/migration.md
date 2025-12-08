@@ -3,8 +3,6 @@
 This document describes the main breaking and behavioral changes for the **AES** and **RSA** examples when migrating from **v2.4.0** to **v3.4.3** of CryptoNet.
 
 ---
-TODO: Issue encrypting 🤣🤣 in case of string, use bytes. an example to clarify this.
-
 ## 1. Common Changes
 
 ### 1.1 Utility changes
@@ -26,16 +24,16 @@ You will typically:
 
 **v2.4.0**
 
-```csharp
+~~~csharp
 using CryptoNet.Models;
 using CryptoNet.Utils;
-```
+~~~
 
 **v3.4.3**
 
-```csharp
+~~~csharp
 using CryptoNet.Models;
-```
+~~~
 
 The AES encryption/decryption API (`ICryptoNet` + `CryptoNetAes`) remains mostly the same. The main breaking changes are related to **key management** and **utility usage**.
 
@@ -43,7 +41,7 @@ The AES encryption/decryption API (`ICryptoNet` + `CryptoNetAes`) remains mostly
 
 #### 2.2.1 Generating a key in memory
 
-```csharp
+~~~csharp
 // v2.4.0
 ICryptoNet cryptoNet = new CryptoNetAes();
 var key = cryptoNet.ExportKey();
@@ -51,7 +49,7 @@ var key = cryptoNet.ExportKey();
 // v3.4.3
 ICryptoNetAes cryptoNet = new CryptoNetAes();
 var key = cryptoNet.GetKey();
-```
+~~~
 
 **Changes:**
 - Interface: `ICryptoNet` → `ICryptoNetAes` for key retrieval.
@@ -62,17 +60,17 @@ var key = cryptoNet.GetKey();
 
 You still use `ICryptoNet` for encryption/decryption with the retrieved key:
 
-```csharp
+~~~csharp
 ICryptoNet encryptClient = new CryptoNetAes(key);
 var encrypt = encryptClient.EncryptFromString(ConfidentialDummyData);
 
 ICryptoNet decryptClient = new CryptoNetAes(key);
 var decrypt = decryptClient.DecryptToString(encrypt);
-```
+~~~
 
 #### 2.2.2 Saving a symmetric key to file
 
-```csharp
+~~~csharp
 // v2.4.0
 ICryptoNet cryptoNet = new CryptoNetAes();
 var file = new FileInfo(SymmetricKeyFile);
@@ -82,7 +80,7 @@ cryptoNet.ExportKeyAndSave(file);
 ICryptoNetAes cryptoNet = new CryptoNetAes();
 var file = new FileInfo(SymmetricKeyFile);
 cryptoNet.SaveKey(file);
-```
+~~~
 
 **Changes:**
 - Interface: `ICryptoNet` → `ICryptoNetAes`.
@@ -104,13 +102,13 @@ No changes are required for the encryption/decryption code in these examples.
 
 #### 2.4.1 Method name
 
-```csharp
+~~~csharp
 // v2.4.0
 public static void Example_5_Encrypt_And_Decrypt_PdfFile_With_SymmetricKey_Test(string filename)
 
 // v3.4.3
 public static void Example_5_Encrypt_And_Decrypt_File_With_SymmetricKey_Test(string filename)
-```
+~~~
 
 **Change:** Method name updated to reflect support for arbitrary files, not just PDFs.
 
@@ -118,7 +116,7 @@ public static void Example_5_Encrypt_And_Decrypt_File_With_SymmetricKey_Test(str
 
 #### 2.4.2 Key retrieval
 
-```csharp
+~~~csharp
 // v2.4.0
 ICryptoNet cryptoNet = new CryptoNetAes();
 var key = cryptoNet.ExportKey();
@@ -126,19 +124,19 @@ var key = cryptoNet.ExportKey();
 // v3.4.3
 ICryptoNetAes cryptoNet = new CryptoNetAes();
 var key = cryptoNet.GetKey();
-```
+~~~
 
 Same pattern as in 2.2.1.
 
 #### 2.4.3 Byte array comparison
 
-```csharp
+~~~csharp
 // v2.4.0
 var isIdenticalFile = CryptoNetUtils.ByteArrayCompare(pdfFileBytes, decrypt);
 
 // v3.4.3
 var isIdenticalFile = ExtShared.ExtShared.ByteArrayCompare(pdfFileBytes, decrypt);
-```
+~~~
 
 **Change:** The helper moved from `CryptoNetUtils` to `ExtShared.ExtShared`.
 
@@ -167,20 +165,20 @@ The `UniqueKeyGenerator` function is unchanged between versions; no migration is
 
 **v2.4.0**
 
-```csharp
+~~~csharp
 using CryptoNet.Models;
 using CryptoNet.Utils;
 
 namespace CryptoNet.Cli;
-```
+~~~
 
 **v3.4.3**
 
-```csharp
+~~~csharp
 using CryptoNet.Models;
 
 namespace CryptoNet.Examples;
-```
+~~~
 
 The RSA encryption/decryption calls via `ICryptoNet` remain conceptually the same. The major changes are centralized in **key management APIs** and **certificate utilities**.
 
@@ -188,7 +186,7 @@ The RSA encryption/decryption calls via `ICryptoNet` remain conceptually the sam
 
 #### 3.2.1 Generating keys in memory
 
-```csharp
+~~~csharp
 // v2.4.0
 ICryptoNet cryptoNet = new CryptoNetRsa();
 
@@ -200,7 +198,7 @@ ICryptoNetRsa cryptoNet = new CryptoNetRsa();
 
 var privateKey = cryptoNet.GetKey(true);
 var publicKey  = cryptoNet.GetKey(false);
-```
+~~~
 
 **Changes:**
 - Interface: `ICryptoNet` → `ICryptoNetRsa` for RSA key retrieval.
@@ -211,17 +209,17 @@ var publicKey  = cryptoNet.GetKey(false);
 
 Encryption/decryption continues to use `ICryptoNet` with `CryptoNetRsa(key)`:
 
-```csharp
+~~~csharp
 ICryptoNet encryptClient = new CryptoNetRsa(publicKey);
 var encrypt = encryptClient.EncryptFromString(ConfidentialDummyData);
 
 ICryptoNet decryptClient = new CryptoNetRsa(privateKey);
 var decrypt = decryptClient.DecryptToString(encrypt);
-```
+~~~
 
 #### 3.2.2 Saving keys to disk
 
-```csharp
+~~~csharp
 // v2.4.0
 ICryptoNet cryptoNet = new CryptoNetRsa();
 
@@ -233,7 +231,7 @@ ICryptoNetRsa cryptoNet = new CryptoNetRsa();
 
 cryptoNet.SaveKey(new FileInfo(PrivateKeyFile), true);
 cryptoNet.SaveKey(new FileInfo(PublicKeyFile),  false);
-```
+~~~
 
 **Changes:**
 - Interface: `ICryptoNet` → `ICryptoNetRsa`.
@@ -246,7 +244,7 @@ cryptoNet.SaveKey(new FileInfo(PublicKeyFile),  false);
 
 #### 3.3.1 Certificate lookup (Examples 4, 5, 7)
 
-```csharp
+~~~csharp
 // v2.4.0
 // Find and replace CN=Maytham with your own certificate
 X509Certificate2? certificate = CryptoNetUtils.GetCertificateFromStore("CN=Maytham");
@@ -254,7 +252,7 @@ X509Certificate2? certificate = CryptoNetUtils.GetCertificateFromStore("CN=Mayth
 // v3.4.3
 // Find and replace CN=localhost with your own certificate
 X509Certificate2? certificate = ExtShared.ExtShared.GetCertificateFromStore("CN=localhost");
-```
+~~~
 
 **Changes:**
 - Utility: `CryptoNetUtils.GetCertificateFromStore` → `ExtShared.ExtShared.GetCertificateFromStore`.
@@ -272,7 +270,7 @@ This affects:
 
 #### 3.3.2 Exporting public key from certificate (Example 5)
 
-```csharp
+~~~csharp
 // v2.4.0
 X509Certificate2? certificate = CryptoNetUtils.GetCertificateFromStore("CN=Maytham");
 
@@ -284,7 +282,7 @@ X509Certificate2? certificate = ExtShared.ExtShared.GetCertificateFromStore("CN=
 
 ICryptoNetRsa cryptoNetWithPublicKey = new CryptoNetRsa(certificate, KeyType.PublicKey);
 var publicKey = cryptoNetWithPublicKey.GetKey(false);
-```
+~~~
 
 **Changes:**
 - Certificate retrieval via `ExtShared.ExtShared` instead of `CryptoNetUtils`.
