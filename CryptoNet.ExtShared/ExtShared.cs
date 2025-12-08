@@ -106,23 +106,23 @@ public static class ExtShared
     }
 
     /// <summary>
-    /// Converts a byte array to an ASCII-encoded string.
+    /// Converts a byte array to an UTF8-encoded string.
     /// </summary>
     /// <param name="bytes">The byte array to convert.</param>
-    /// <returns>An ASCII-encoded string representation of the byte array.</returns>
+    /// <returns>An UTF8-encoded string representation of the byte array.</returns>
     public static string BytesToString(byte[] bytes)
     {
-        return Encoding.ASCII.GetString(bytes);
+        return Encoding.UTF8.GetString(bytes);
     }
 
     /// <summary>
-    /// Converts an ASCII-encoded string to a byte array.
+    /// Converts an UTF8-encoded string to a byte array.
     /// </summary>
     /// <param name="content">The string to convert.</param>
-    /// <returns>A byte array representing the ASCII-encoded string.</returns>
+    /// <returns>A byte array representing the UTF8-encoded string.</returns>
     public static byte[] StringToBytes(string content)
     {
-        return Encoding.ASCII.GetBytes(content);
+        return Encoding.UTF8.GetBytes(content);
     }
 
     /// <summary>

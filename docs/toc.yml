@@ -2,3 +2,7 @@
   href: introduction.md
 - name: Getting Started
   href: getting-started.md
+- name: Migration Guide from v2.x to v3.x
+  href: migration.md
+- name: Examples of Use
+  href: examples.md

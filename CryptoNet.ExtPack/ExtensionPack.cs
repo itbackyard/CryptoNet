@@ -24,7 +24,7 @@ namespace CryptoNet.ExtPack
                 return originalContent == decryptedContent;
             }
 
-            return CalculateMd5(originalContent).Equals(CalculateMd5(decryptedContent));
+            return CalculateMd5(originalContent).Equals(CalculateMd5(decryptedContent), StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -34,8 +34,8 @@ namespace CryptoNet.ExtPack
         /// <returns>The MD5 hash of the content as a lowercase hexadecimal string.</returns>
         public static string CalculateMd5(string content)
         {
-            var hash = MD5.HashData(Encoding.UTF8.GetBytes(content));
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(content));
+            return Convert.ToHexString(hash).ToLowerInvariant();
         }
 
         /// <summary>

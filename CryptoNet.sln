@@ -20,7 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{1733D1
 		Directory.Build.Props = Directory.Build.Props
 		DockerBuild.ps1 = DockerBuild.ps1
 		Dockerfile = Dockerfile
-		RELEASE-NOTES = RELEASE-NOTES
 		run_codecoverage.ps1 = run_codecoverage.ps1
 		run_codecoverage.txt = run_codecoverage.txt
 		run_release.ps1 = run_release.ps1
@@ -28,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{1733D1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{6976E2ED-A139-48C5-A390-639F56A8B348}"
 	ProjectSection(SolutionItems) = preProject
+		CONTRIBUTING.md = CONTRIBUTING.md
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -52,6 +52,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSAExample", "Examples\DSAExample\DSAExample.csproj", "{7338899C-D3F0-4268-AAE8-45793979D936}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoNet.ConsumerTest", "CryptoNet.ConsumerTest\CryptoNet.ConsumerTest.csproj", "{6BBC4487-140E-44E1-9703-F9F48E805589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoNet.Examples", "CryptoNet.Examples\CryptoNet.Examples.csproj", "{CAEB7F60-5632-2F90-05B7-D72D7AD177FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{B3B9ABB3-DBB7-4E0F-970C-761B0B1A4B81}"
+	ProjectSection(SolutionItems) = preProject
+		docs\examples.md = docs\examples.md
+		docs\getting-started.md = docs\getting-started.md
+		docs\introduction.md = docs\introduction.md
+		docs\migration.md = docs\migration.md
+		docs\toc.yml = docs\toc.yml
+		docs\tooling.md = docs\tooling.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +111,10 @@ Global
 		{6BBC4487-140E-44E1-9703-F9F48E805589}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BBC4487-140E-44E1-9703-F9F48E805589}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BBC4487-140E-44E1-9703-F9F48E805589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAEB7F60-5632-2F90-05B7-D72D7AD177FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEB7F60-5632-2F90-05B7-D72D7AD177FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAEB7F60-5632-2F90-05B7-D72D7AD177FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEB7F60-5632-2F90-05B7-D72D7AD177FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

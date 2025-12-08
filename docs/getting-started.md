@@ -6,7 +6,7 @@ Here are some examples:
 
 ### Example: Encrypt and Decrypt Content With Symmetric Key
 In this example CryptoNetAes generates a random key and IV, hence we use the same instance we can both encrypt and decrypt.
-```csharp
+~~~csharp
 ICryptoNet cryptoNet = new CryptoNetAes();
 var key = cryptoNet.ExportKey();
 
@@ -17,10 +17,10 @@ ICryptoNet decryptClient = new CryptoNetAes(key);
 var decrypt = decryptClient.DecryptToString(encrypt);
 
 Debug.Assert(ConfidentialDummyData == decrypt);
-```
+~~~
 
 ### Example: Encrypt and Decrypt Content With Export and Import Self-Generated Symmetric Key
-```csharp
+~~~csharp
 ICryptoNet cryptoNet = new CryptoNetAes();
 var file = new FileInfo(SymmetricKeyFile);
 cryptoNet.ExportKeyAndSave(file);
@@ -33,10 +33,10 @@ ICryptoNet cryptoNetKeyImport = new CryptoNetAes(file);
 var decrypt = cryptoNetKeyImport.DecryptToString(encrypt);
 
 Debug.Assert(ConfidentialDummyData == decrypt);
-```
+~~~
 
 ### Example: Generate Asymmetric RSA key pair, Export Private and Public, use Public key to encrypt with and Use Private key to decrypt with
-```csharp
+~~~csharp
 ICryptoNet cryptoNet = new CryptoNetRsa();
 
 cryptoNet.ExportKeyAndSave(new FileInfo(PrivateKeyFile), true);
@@ -52,10 +52,10 @@ ICryptoNet cryptoNetPriKey = new CryptoNetRsa(new FileInfo(PrivateKeyFile));
 var decrypt = cryptoNetPriKey.DecryptToString(encrypt);
 
 Debug.Assert(ConfidentialDummyData == decrypt);
-```
+~~~
 
 ### Example: Use X509 certificate to Encrypt with Public Key and later Decrypt with Private Key
-```csharp
+~~~csharp
 // Find and replace CN=Maytham with your own certificate
 X509Certificate2? certificate = CryptoNetUtils.GetCertificateFromStore("CN=Maytham");
 
@@ -66,4 +66,4 @@ ICryptoNet cryptoNetWithPrivateKey = new CryptoNetRsa(certificate, KeyType.Priva
 var decryptWithPrivateKey = cryptoNetWithPrivateKey.DecryptToString(encryptWithPublicKey);
 
 Debug.Assert(ConfidentialDummyData == decryptWithPrivateKey);
-```
+~~~
