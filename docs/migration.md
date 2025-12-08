@@ -3,6 +3,7 @@
 This document describes the main breaking and behavioral changes for the **AES** and **RSA** examples when migrating from **v2.4.0** to **v3.4.3** of CryptoNet.
 
 ---
+TODO: Issue encrypting 🤣🤣 in case of string, use bytes. an example to clarify this.
 
 ## 1. Common Changes
 

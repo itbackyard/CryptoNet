@@ -92,6 +92,24 @@ public static class ExampleRsa
         Debug.Assert(!string.IsNullOrEmpty(publicKey));
     }
 
+    public static void Example_6_Wokring_With_Special_Character_Text()
+    {
+        string ConfidentialDummyDataWithSpecialText = "Top secret 😃😃"; //
+
+        ICryptoNetRsa cryptoNet = new CryptoNetRsa();
+        var privateKey = cryptoNet.GetKey(true);
+        var publicKey = cryptoNet.GetKey(false);
+
+        ICryptoNet encryptClient = new CryptoNetRsa(publicKey);
+        var encrypted = encryptClient.EncryptFromBytes(Encoding.UTF8.GetBytes(ConfidentialDummyDataWithSpecialText));
+
+        ICryptoNet decryptClient = new CryptoNetRsa(privateKey);
+        var decrypted = decryptClient.DecryptToBytes(encrypted);
+        var decryptedString = Encoding.UTF8.GetString(decrypted);
+
+        Debug.Assert(ConfidentialDummyDataWithSpecialText == decryptedString);
+    }
+
     /// <summary>
     /// CryptoNet interact with .net 5/6 for customization, like import/export PEM
     /// Work in Progress, not finished
